@@ -3,6 +3,9 @@ import { log } from '@graphprotocol/graph-ts'
 import { UniswapFactory, Pair, Token, Bundle } from '../types/schema'
 import { PairCreated } from '../types/Factory/Factory'
 import { Pair as PairTemplate } from '../types/templates'
+import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
+
+
 import {
   FACTORY_ADDRESS,
   ZERO_BD,
@@ -68,7 +71,6 @@ export function handleNewPair(event: PairCreated): void {
     token1.name = fetchTokenName(event.params.token1)
     token1.totalSupply = fetchTokenTotalSupply(event.params.token1)
     let decimals = fetchTokenDecimals(event.params.token1)
-
     // bail if we couldn't figure out the decimals
     if (decimals === null) {
       return

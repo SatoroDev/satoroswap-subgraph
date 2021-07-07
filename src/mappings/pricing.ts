@@ -30,16 +30,17 @@ export function getEthPriceInUSD(): BigDecimal {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
-  '0x55d398326f99059ff775485246999027b3197955', // USDT
-  '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', //BNB
+  '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', //WBNB
+  '0x55d398326f99059ff775485246999027b3197955', //USDT
+  '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', //BUSD
+  '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d' //USDC
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
-let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('0')
+let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('1')
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('0')
+let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('0.00000000001')
 
 /**
  * Search through graph to find derived Eth per token.
@@ -61,11 +62,11 @@ export function findEthPerToken(token: Token): BigDecimal {
       if (pair.token1 == token.id && pair.reserveETH.gt(MINIMUM_LIQUIDITY_THRESHOLD_ETH)) {
         let token0 = Token.load(pair.token0)
         return pair.token0Price.times(token0.derivedETH as BigDecimal) // return token0 per our token * ETH per token 0
+
       }
     }
   }
-  //return ZERO_BD // nothing was found return 0
-  return ONE_BD // nothing was found return 0
+  return ZERO_BD // nothing was found return 0
 }
 
 /**

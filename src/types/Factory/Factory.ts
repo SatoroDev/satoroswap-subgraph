@@ -45,6 +45,29 @@ export class Factory extends ethereum.SmartContract {
     return new Factory("Factory", address);
   }
 
+  INIT_CODE_PAIR_HASH(): Bytes {
+    let result = super.call(
+      "INIT_CODE_PAIR_HASH",
+      "INIT_CODE_PAIR_HASH():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_INIT_CODE_PAIR_HASH(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "INIT_CODE_PAIR_HASH",
+      "INIT_CODE_PAIR_HASH():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
   allPairs(param0: BigInt): Address {
     let result = super.call("allPairs", "allPairs(uint256):(address)", [
       ethereum.Value.fromUnsignedBigInt(param0)
